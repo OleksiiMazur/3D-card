@@ -1,0 +1,81 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1;-webkit-text-size-adjust:100%}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0}input,textarea{-webkit-box-shadow:none;box-shadow:none;border-radius:0;outline:none}a:focus{outline:none}b,strong{font-weight:bold}*{margin:0;padding:0;-webkit-box-sizing:border-box;box-sizing:border-box}
+
+body,html {
+    font-family: Roboto, Arial, sans-serif;
+    font-weight: 700;
+    overflow: hidden;
+}
+
+body {
+    background-color: #020000;
+    color: #fff;
+}
+
+.container {
+    max-width: 90%;
+    margin: 0 auto;
+    height: 92vh;
+}
+
+.card-wrap {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 800px;
+}
+
+.card {
+    position: relative;
+    box-sizing: border-box;
+    /*background-color: #240540;*/
+    height: 320px;
+    width: 320px;
+    border-radius: 15px;
+    transform-style: preserve-3d;
+    /*transform: rotateY(-10deg) rotateX(-10deg);*/
+    /*transition: transform .05s linear;*/
+}
+.card__img {
+    position: absolute;
+    background: transparent url("shield.png") no-repeat center / 90%;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.card__img:after {
+    position: absolute;
+    z-index: -1;
+    content: '';
+    background: #ccc;
+    top: 50%;
+    left: 50%;
+    height: 250px;
+    border-radius: 50%;
+    width: 250px;
+    opacity: 0.3;
+    filter: blur(70px);
+    transform: translateX(-50%) translateY(-50%) translateZ(-250px);
+}
+
+.card__title {
+    width: 100%;
+    text-align: center;
+    font-size: 40px;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateZ(35px);
+}
+
+.card__info {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateZ(75px);
+}

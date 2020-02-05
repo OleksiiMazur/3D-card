@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+<!--    <link rel="stylesheet" href="style.css">-->
+</head>
+<body>
+<style>
+    html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1;-webkit-text-size-adjust:100%}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0}input,textarea{-webkit-box-shadow:none;box-shadow:none;border-radius:0;outline:none}a:focus{outline:none}b,strong{font-weight:bold}*{margin:0;padding:0;-webkit-box-sizing:border-box;box-sizing:border-box}
+
+    body,html {
+        font-family: Roboto, Arial, sans-serif;
+        font-weight: 700;
+        overflow: hidden;
+    }
+
+    body {
+        background-color: #020000;
+        color: #fff;
+    }
+
+    .container {
+        max-width: 90%;
+        margin: 0 auto;
+        height: 92vh;
+    }
+
+    .card-wrap {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        perspective: 800px;
+    }
+
+    .card {
+        position: relative;
+        box-sizing: border-box;
+        /*background-color: #240540;*/
+        height: 320px;
+        width: 320px;
+        border-radius: 15px;
+        transform-style: preserve-3d;
+        /*transform: rotateY(-10deg) rotateX(-10deg);*/
+        /*transition: transform .05s linear;*/
+    }
+    .card__img {
+        position: absolute;
+        background: transparent url("shield.png") no-repeat center / 90%;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+    }
+    .card__img:after {
+        position: absolute;
+        z-index: -1;
+        content: '';
+        background: #ccc;
+        top: 50%;
+        left: 50%;
+        height: 250px;
+        border-radius: 50%;
+        width: 250px;
+        opacity: 0.3;
+        filter: blur(70px);
+        transform: translateX(-50%) translateY(-50%) translateZ(-250px);
+    }
+
+    .card__title {
+        width: 100%;
+        text-align: center;
+        font-size: 40px;
+        position: absolute;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateZ(35px);
+    }
+
+    .card__info {
+        display: block;
+        width: 100%;
+        text-align: center;
+        font-size: 22px;
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateZ(75px);
+    }
+</style>
+
+
+    <div class="container">
+        <div class="card-wrap">
+            <div class="card">
+                <div class="card__img"></div>
+                <p class="card__title">
+                    Avengers
+                    <span></span>
+                </p>
+                <span class="card__info">
+                    shield
+                </span>
+            </div>
+        </div>
+    </div>
+
+<!--    <script src="card.js"></script>-->
+    <script src="card.js">
+        let $card = document.querySelector(".card");
+
+        let deviceOrientation = function () {
+            function getCookie(name) {
+                let matches = document.cookie.match(new RegExp(
+                    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+                ));
+                return matches ? decodeURIComponent(matches[1]) : undefined;
+            }
+            function setCookie(name, value, options = {}) {
+                options = {
+                    path: '/',
+                };
+                let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+                for (let optionKey in options) {
+                    updatedCookie += "; " + optionKey;
+                    let optionValue = options[optionKey];
+                    if (optionValue !== true) {
+                        updatedCookie += "=" + optionValue;
+                    }
+                }
+                document.cookie = updatedCookie;
+            }
+            function deleteCookie(name) {
+                setCookie(name, "", {
+                    'max-age': -1
+                })
+            }
+
+            if($card && window.innerWidth <= 1024 && window.DeviceOrientationEvent) {
+                if( !getCookie('device_orientation_request_granted') ){
+                    sendRequest();
+                } else if (getCookie('device_orientation_request_granted')) {
+                    deviceOrientationParallax();
+                } else if (getCookie('device_orientation_request_refused')) {
+
+                }
+
+                function sendRequest(){ //send request for using DeviceOrientationEvent ==> start deviceOrientationParallax if grated or don`t need
+                    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                        document.querySelector('body').addEventListener('click', function () { // feature detect
+                            DeviceOrientationEvent.requestPermission()
+                                .then(permissionState => {
+                                    if (permissionState === 'granted') {
+                                        setCookie('device_orientation_request_granted', 'granted', {
+                                            secure: true,
+                                            'samesite': 'lax',
+                                            'max-age': 1000000,
+                                        });
+
+                                        deviceOrientationParallax();
+                                    } else {
+                                        setCookie('device_orientation_request_refused', 'refused', {
+                                            secure: true,
+                                            'samesite': 'lax',
+                                            'max-age': 40000,
+                                        });
+                                    }
+                                })
+                                .catch(console.error);
+                        });
+                    } else { // handle regular non iOS 13+ devices, don`t need a request
+                        deviceOrientationParallax();
+                    }
+                }
+            }
+
+            function deviceOrientationParallax() {
+                window.addEventListener('deviceorientation', function(event){
+                    let xDevicePos = event.beta / 1.5;
+                    let yDevicePos = event.gamma / 3;
+                    // xDevicePos = xDevicePos;
+                    yDevicePos = -yDevicePos;
+
+                    $card.style.transform = 'rotateX(' + (xDevicePos - 30) + 'deg) rotateY(' + yDevicePos + 'deg)';
+                }, true);
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", function(){
+            deviceOrientation();
+        });
+    </script>
+</body>
+</html>
