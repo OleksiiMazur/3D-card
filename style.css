@@ -30,13 +30,10 @@ body {
 .card {
     position: relative;
     box-sizing: border-box;
-    /*background-color: #240540;*/
-    height: 320px;
-    width: 320px;
+    height: 400px;
+    width: 400px;
     border-radius: 15px;
     transform-style: preserve-3d;
-    /*transform: rotateY(-10deg) rotateX(-10deg);*/
-    /*transition: transform .05s linear;*/
 }
 .card:after {
     position: absolute;
@@ -46,8 +43,8 @@ body {
     top: 30%;
     left: 50%;
     height: 290px;
-    border-radius: 200px;
     width: 290px;
+    border-radius: 200px;
     opacity: 0.3;
     filter: blur(70px);
     transform: translateX(-50%) translateY(-50%) translateZ(-150px);
@@ -80,4 +77,11 @@ body {
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%) translateZ(75px);
+}
+
+@media screen and (max-width: 767px) {
+    .card:after {
+        height: 170px;
+        width: 170px;
+    }
 }

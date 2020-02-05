@@ -1,7 +1,6 @@
 "use strict";
 
 let deviceOrientation = function () {
-    console.log('REsized');
     let $card = document.querySelector('.card');
     let $body = document.querySelector('body');
 
@@ -74,10 +73,11 @@ let deviceOrientation = function () {
 
     function desktopParallax() {
         document.addEventListener('mousemove', function (e) {
+            console.log('step');
             let windWidth= window.innerWidth;
             let windHeight= window.innerHeight;
             let parallaxY = -(windWidth / 2 - e.pageX) / 20;
-            let parallaxX = (windHeight - e.pageY) / 10;
+            let parallaxX = (windHeight - e.pageY) / 15;
 
             $card.style.transform = 'rotateX(' + (parallaxX) + 'deg) rotateY(' + (parallaxY) + 'deg)';
             window.addEventListener('scroll', function(){
