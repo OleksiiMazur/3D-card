@@ -1,7 +1,6 @@
 let deviceOrientation = function () {
     let $card = document.querySelector('.card');
     let $body = document.querySelector('body');
-    $body.style.background = 'red';
 
     function getCookie(name) {
         let matches = document.cookie.match(new RegExp(
