@@ -23,7 +23,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    perspective: 800px;
+    perspective: 1000px;
     padding-top: 500px;
 }
 
