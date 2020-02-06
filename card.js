@@ -51,7 +51,7 @@ function deviceOrientation($card, $body) {
     }
 
     function scrollParallax() {
-        alert('scrollParallax');
+        // alert('scrollParallax');
 
         window.addEventListener('scroll', function() {
             let windowTopScroll = pageYOffset;
@@ -68,7 +68,7 @@ function deviceOrientation($card, $body) {
     }
 
     sensorsChecker.checkDeviceorientation(function(){ //check the sensors for the deviceorientation api
-        alert('Sensor detected');
+        // alert('Sensor detected');
 
         function getCookie(name) {
             let matches = document.cookie.match(new RegExp(
@@ -124,10 +124,10 @@ function deviceOrientation($card, $body) {
         }
     },function(){
         if (window.innerWidth <= 1024) {
-            alert('no sensor detected, \nMOBILE or TAB without sensors');
+            // alert('no sensor detected, \nMOBILE or TAB without sensors');
             scrollParallax();
         } else {
-            alert('no sensor detected, \nDESKTOP');
+            // alert('no sensor detected, \nDESKTOP');
             desktopParallax();
             // scrollParallax();
         }
