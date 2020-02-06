@@ -73,11 +73,12 @@ body {
     display: block;
     width: 100%;
     text-align: left;
-    font-size: 187x;
+    font-size: 18px;
     position: absolute;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%) translateZ(75px);
+    max-width: 200px;
 }
 
 @media screen and (max-width: 767px) {

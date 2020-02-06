@@ -4,11 +4,58 @@ if ( location.protocol !== "https:" ) {
     location.href = "https:" + window.location.href.substring( window.location.protocol.length );
 }
 
-let deviceOrientation = function () {
-    let $card = document.querySelector('.card');
-    let $body = document.querySelector('body');
+function deviceOrientation($card, $body) {
 
-    if($card && window.innerWidth <= 1024 && window.DeviceOrientationEvent) {
+    function desktopParallax() {
+        document.addEventListener('mousemove', function (e) {
+            let windWidth= window.innerWidth;
+            let windHeight= window.innerHeight;
+            let leftRight = -(windWidth / 2 - e.pageX) / 35;
+            let bottomTop = (windHeight - e.pageY) / 20;
+
+            $card.style.transform = 'rotateX(' + (bottomTop) + 'deg) rotateY(' + (leftRight) + 'deg)';
+            document.querySelector('.card__info')
+                .textContent  = 'bottomTop:\ ' + bottomTop + 'deg' + '\n leftRight:\ ' + leftRight + 'deg';
+        });
+    }
+
+    function deviceOrientationParallax() {
+        window.addEventListener('deviceorientation', function(event){
+            let bottomTop;
+            let leftRight;
+            let orientation = (screen.orientation || {}).type || screen.mozOrientation || screen.msOrientation;
+
+            if (orientation === "portrait-primary") {
+                bottomTop = event.beta / 1.5;
+                leftRight = -(event.gamma / 2.5);
+            } else if (orientation === "portrait-secondary") {
+                bottomTop = -(event.beta / 1.5);
+                leftRight = (event.gamma / 2.5);
+            } else if (orientation === "landscape-primary") {
+                bottomTop = -(event.gamma / 2.5);
+                leftRight = -(event.beta / 1.5);
+            } else if (orientation === "landscape-secondary") {
+                bottomTop = (event.gamma / 2.5);
+                leftRight = (event.beta / 1.5);
+            } else if (orientation === "portrait-secondary") {
+                bottomTop = -(event.gamma / 1.5);
+                leftRight = (event.beta / 2.5);
+            }
+
+            $card.style.transform = 'rotateX(' + (bottomTop - 25) + 'deg) rotateY(' + leftRight + 'deg)';
+
+            document.querySelector('.card__info')
+                .textContent  = 'bottomTop: ' + event.beta + 'deg' + '\nleftRight: ' + event.gamma + 'deg' + '\n compass: ' + event.alpha;
+        }, false);
+    }
+
+    function scrollParallax() {
+        alert('scrollParallax');
+    }
+
+    sensorsChecker.checkDeviceorientation(function(){ //check the sensors for the deviceorientation api
+        alert('Sensor detected');
+
         function getCookie(name) {
             let matches = document.cookie.match(new RegExp(
                 "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -40,91 +87,42 @@ let deviceOrientation = function () {
             sendRequest();
         } else if (getCookie('device_orientation_request_granted')) {
             deviceOrientationParallax();
-        } else if (getCookie('device_orientation_request_refused')) {
-
         }
 
         function sendRequest(){ //send request for using DeviceOrientationEvent ==> start deviceOrientationParallax if grated or don`t need
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                 $body.addEventListener('click', function () { // feature detect
-                    DeviceOrientationEvent.requestPermission()
-                        .then(permissionState => {
-                            if (permissionState === 'granted') {
-                                setCookie('device_orientation_request_granted', 'granted', {
-                                    secure: false,
-                                    'samesite': 'lax',
-                                    'max-age': 1000000,
-                                });
+                    DeviceOrientationEvent.requestPermission().then(permissionState => {
+                        if (permissionState === 'granted') {
+                            setCookie('device_orientation_request_granted', 'granted', {
+                                secure: false,
+                                'samesite': 'lax',
+                                'max-age': 1000000,
+                            });
 
-                                deviceOrientationParallax();
-                            } else {
-                                setCookie('device_orientation_request_refused', 'refused', {
-                                    secure: false,
-                                    'samesite': 'lax',
-                                    'max-age': 40000,
-                                });
-                            }
-                        })
-                        .catch(console.error);
+                            deviceOrientationParallax();
+                        }
+                    }).catch(console.error);
                 });
             } else {
                 deviceOrientationParallax();
             }
         }
-    } else if ($card && window.innerWidth > 1024 && window.DeviceOrientationEvent) {
-        desktopParallax();
-    } else {
-        scrollParallax();
-    }
-
-    function desktopParallax() {
-        document.addEventListener('mousemove', function (e) {
-            let windWidth= window.innerWidth;
-            let windHeight= window.innerHeight;
-            let parallaxY = -(windWidth / 2 - e.pageX) / 20;
-            let parallaxX = (windHeight - e.pageY) / 15;
-
-            $card.style.transform = 'rotateX(' + (parallaxX) + 'deg) rotateY(' + (parallaxY) + 'deg)';
-        });
-    }
-
-    function deviceOrientationParallax() {
-        window.addEventListener('deviceorientation', function(event){
-            let bottomTop;
-            let leftRight;
-            let orientation = (screen.orientation || {}).type || screen.mozOrientation || screen.msOrientation;
-
-            if (orientation === "portrait-primary") {
-                bottomTop = event.beta / 1.5;
-                leftRight = -(event.gamma / 2.5);
-            } else if (orientation === "portrait-secondary") {
-                bottomTop = -(event.beta / 1.5);
-                leftRight = (event.gamma / 2.5);
-            } else if (orientation === "landscape-primary") {
-                bottomTop = -(event.gamma / 2.5);
-                leftRight = -(event.beta / 1.5);
-            } else if (orientation === "landscape-secondary") {
-                bottomTop = (event.gamma / 2.5);
-                leftRight = (event.beta / 1.5);
-            } else if (orientation === "portrait-secondary") {
-                bottomTop = -(event.gamma / 1.5);
-                leftRight = (event.beta / 2.5);
-            } else if (orientation === undefined) {
-            }
-
-            $card.style.transform = 'rotateX(' + (bottomTop - 25) + 'deg) rotateY(' + leftRight + 'deg)';
-
-            document.querySelector('.card__info')
-                .textContent  = 'bottomTop: ' + event.beta + 'deg' + '\nleftRight' + event.gamma + 'deg';
-        }, false);
-    }
-
-    function scrollParallax() {
-        console.log('scrollParallax');
-    }
+    },function(){
+        if (window.innerWidth <= 1024) {
+            alert('no sensor detected, \nMOBILE or TAB without sensors');
+            scrollParallax();
+        } else {
+            alert('no sensor detected, \nDESKTOP');
+            desktopParallax();
+        }
+    });
 };
 
 document.addEventListener("DOMContentLoaded", function(){
-    deviceOrientation();
+    let $card = document.querySelector('.card');
+    let $body = document.querySelector('body');
+
+    deviceOrientation($card, $body);
     window.onresize = deviceOrientation;
 });
