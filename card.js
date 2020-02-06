@@ -14,8 +14,7 @@ function deviceOrientation($card, $body) {
             let bottomTop = (windHeight - e.pageY) / 20;
 
             $card.style.transform = 'rotateX(' + (bottomTop) + 'deg) rotateY(' + (leftRight) + 'deg)';
-            document.querySelector('.card__info')
-                .textContent  = 'bottomTop:\ ' + bottomTop + 'deg' + '\n leftRight:\ ' + leftRight + 'deg';
+            // document.querySelector('.card__info').textContent  = 'bottomTop:\ ' + bottomTop + 'deg' + '\n leftRight:\ ' + leftRight + 'deg';
         });
     }
 
@@ -24,6 +23,9 @@ function deviceOrientation($card, $body) {
             let bottomTop;
             let leftRight;
             let orientation = (screen.orientation || {}).type || screen.mozOrientation || screen.msOrientation;
+
+            bottomTop = event.beta / 1.5;
+            leftRight = -(event.gamma / 2.5);
 
             if (orientation === "portrait-primary") {
                 bottomTop = event.beta / 1.5;
@@ -44,13 +46,25 @@ function deviceOrientation($card, $body) {
 
             $card.style.transform = 'rotateX(' + (bottomTop - 25) + 'deg) rotateY(' + leftRight + 'deg)';
 
-            document.querySelector('.card__info')
-                .textContent  = 'bottomTop: ' + event.beta + 'deg' + '\nleftRight: ' + event.gamma + 'deg' + '\n compass: ' + event.alpha;
+            // document.querySelector('.card__info').textContent  = 'bottomTop: ' + event.beta + 'deg' + '\nleftRight: ' + event.gamma + 'deg' + '\n compass: ' + event.alpha;
         }, false);
     }
 
     function scrollParallax() {
         alert('scrollParallax');
+
+        window.addEventListener('scroll', function() {
+            let windowTopScroll = pageYOffset;
+            let windowHeight = window.innerHeight;
+            let cardTop = $card.offsetTop;
+            let cardHeight = $card.offsetHeight;
+
+            if(windowTopScroll < (cardTop + windowHeight) && windowTopScroll > (cardTop - windowHeight)) {
+                console.log('that`s it');
+            } else {
+                console.log('not yet');
+            }
+        });
     }
 
     sensorsChecker.checkDeviceorientation(function(){ //check the sensors for the deviceorientation api
@@ -115,6 +129,7 @@ function deviceOrientation($card, $body) {
         } else {
             alert('no sensor detected, \nDESKTOP');
             desktopParallax();
+            // scrollParallax();
         }
     });
 };
@@ -124,5 +139,7 @@ document.addEventListener("DOMContentLoaded", function(){
     let $body = document.querySelector('body');
 
     deviceOrientation($card, $body);
-    window.onresize = deviceOrientation;
+    window.onresize = function(){
+        deviceOrientation($card, $body);
+    }
 });
