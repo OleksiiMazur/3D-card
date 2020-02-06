@@ -34,20 +34,21 @@ body {
     width: 400px;
     border-radius: 15px;
     transform-style: preserve-3d;
+    margin: 100px 0;
 }
 .card:after {
     position: absolute;
     z-index: -1;
     content: '';
     background: #ccc;
-    top: 30%;
+    top: 60%;
     left: 50%;
-    height: 290px;
-    width: 290px;
-    border-radius: 200px;
-    opacity: 0.3;
+    height: 250px;
+    width: 250px;
+    border-radius: 50%;
+    opacity: 0.2;
     filter: blur(70px);
-    transform: translateX(-50%) translateY(-50%) translateZ(-150px);
+    transform: translateX(-50%) translateY(-50%) translateZ(20px);
 }
 .card__img {
     position: absolute;
@@ -71,8 +72,8 @@ body {
 .card__info {
     display: block;
     width: 100%;
-    text-align: center;
-    font-size: 22px;
+    text-align: left;
+    font-size: 187x;
     position: absolute;
     bottom: 30px;
     left: 50%;
@@ -81,7 +82,8 @@ body {
 
 @media screen and (max-width: 767px) {
     .card:after {
-        height: 170px;
-        width: 170px;
+        height: 220px;
+        width: 220px;
+        transform: translateX(-50%) translateY(-50%) translateZ(40px);
     }
 }

@@ -1,12 +1,12 @@
 "use strict";
 
+if ( location.protocol !== "https:" ) {
+    location.href = "https:" + window.location.href.substring( window.location.protocol.length );
+}
+
 let deviceOrientation = function () {
     let $card = document.querySelector('.card');
     let $body = document.querySelector('body');
-
-    function checkDeviseOrientation () {
-        let orientation = (screen.orientation || {}).type || screen.mozOrientation || screen.msOrientation;
-    }
 
     if($card && window.innerWidth <= 1024 && window.DeviceOrientationEvent) {
         function getCookie(name) {
@@ -51,7 +51,7 @@ let deviceOrientation = function () {
                         .then(permissionState => {
                             if (permissionState === 'granted') {
                                 setCookie('device_orientation_request_granted', 'granted', {
-                                    secure: true,
+                                    secure: false,
                                     'samesite': 'lax',
                                     'max-age': 1000000,
                                 });
@@ -59,7 +59,7 @@ let deviceOrientation = function () {
                                 deviceOrientationParallax();
                             } else {
                                 setCookie('device_orientation_request_refused', 'refused', {
-                                    secure: true,
+                                    secure: false,
                                     'samesite': 'lax',
                                     'max-age': 40000,
                                 });
@@ -78,7 +78,6 @@ let deviceOrientation = function () {
     }
 
     function desktopParallax() {
-        // alert('desktopParallax');
         document.addEventListener('mousemove', function (e) {
             let windWidth= window.innerWidth;
             let windHeight= window.innerHeight;
@@ -86,8 +85,6 @@ let deviceOrientation = function () {
             let parallaxX = (windHeight - e.pageY) / 15;
 
             $card.style.transform = 'rotateX(' + (parallaxX) + 'deg) rotateY(' + (parallaxY) + 'deg)';
-            window.addEventListener('scroll', function(){
-            });
         });
     }
 
@@ -99,30 +96,31 @@ let deviceOrientation = function () {
 
             if (orientation === "portrait-primary") {
                 bottomTop = event.beta / 1.5;
-                leftRight = -(event.gamma / 3);
+                leftRight = -(event.gamma / 2.5);
             } else if (orientation === "portrait-secondary") {
                 bottomTop = -(event.beta / 1.5);
-                leftRight = (event.gamma / 3);
+                leftRight = (event.gamma / 2.5);
             } else if (orientation === "landscape-primary") {
-                bottomTop = -(event.gamma / 3);
+                bottomTop = -(event.gamma / 2.5);
                 leftRight = -(event.beta / 1.5);
             } else if (orientation === "landscape-secondary") {
-                bottomTop = (event.gamma / 3);
+                bottomTop = (event.gamma / 2.5);
                 leftRight = (event.beta / 1.5);
             } else if (orientation === "portrait-secondary") {
                 bottomTop = -(event.gamma / 1.5);
-                leftRight = (event.beta / 3);
+                leftRight = (event.beta / 2.5);
             } else if (orientation === undefined) {
             }
 
-            // alert(orientation);
             $card.style.transform = 'rotateX(' + (bottomTop - 25) + 'deg) rotateY(' + leftRight + 'deg)';
+
+            document.querySelector('.card__info')
+                .textContent  = 'bottomTop: ' + event.beta + 'deg' + '\nleftRight' + event.gamma + 'deg';
         }, false);
     }
 
     function scrollParallax() {
         console.log('scrollParallax');
-        // alert('scrollParallax');
     }
 };
 
