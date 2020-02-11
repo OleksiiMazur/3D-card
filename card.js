@@ -35,6 +35,22 @@ function deviceOrientation(){
     let $card = document.querySelector('.card');
     let $body = document.querySelector('body');
 
+    function sendRequest(){
+        $body.addEventListener('click', function () { // feature detect
+            DeviceOrientationEvent.requestPermission().then(permissionState => {
+                if (permissionState === 'granted') {
+                    setCookie('device_orientation_request_granted', 'granted', {
+                        secure: false,
+                        'samesite': 'lax',
+                        'max-age': 1000000,
+                    });
+
+                    deviceOrientationParallax();
+                }
+            }).catch(console.error);
+        });
+    }
+
     function desktopParallax() {
         document.addEventListener('mousemove', function (e) {
             let leftRight  = -(window.innerWidth / 2 - e.pageX) / 35;
@@ -91,53 +107,53 @@ function deviceOrientation(){
         });
     }
 
-    sensorsChecker.checkDeviceorientation(
-        function(){ // check if the device has sensors
-            if (window.DeviceOrientationEvent) { // and check if the browser supports DeviceOrientationEvent
-                // alert('Sensor detected, \nbrowser supports \nDeviceOrientationEvent');
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        /**
+         * For iPhone if need request for using DeviceOrientationEvent
+         * */
 
-                function sendRequest(){ //send request for using DeviceOrientationEvent ==> start deviceOrientationParallax if grated or don`t need
-                    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                        $body.addEventListener('click', function () { // feature detect
-                            DeviceOrientationEvent.requestPermission().then(permissionState => {
-                                if (permissionState === 'granted') {
-                                    setCookie('device_orientation_request_granted', 'granted', {
-                                        secure: false,
-                                        'samesite': 'lax',
-                                        'max-age': 1000000,
-                                    });
-
-                                    deviceOrientationParallax();
-                                }
-                            }).catch(console.error);
-                        });
-                    } else {
-                        deviceOrientationParallax();
-                    }
-                }
-
-                if( !getCookie('device_orientation_request_granted') ){
-                    sendRequest();
-                } else if (getCookie('device_orientation_request_granted')) {
-                    deviceOrientationParallax();
-                }
-            } else if (!window.DeviceOrientationEvent) {
-                // alert('Sensor detected, \nbut the browser doesn`t support \nDeviceOrientationEvent');
-                scrollParallax();
-            } else {
-                scrollParallax();
-            }
-        },
-        function(){
-            if (window.innerWidth <= 1024) {
-                // alert('no sensor detected, \nMOBILE or TAB without sensors');
-                scrollParallax();
-            } else {
-                // alert('no sensor detected, \nDESKTOP');
-                desktopParallax();
-            }
+        if( !getCookie('device_orientation_request_granted') ){
+            sendRequest();
+        } else if (getCookie('device_orientation_request_granted')) {
+            deviceOrientationParallax();
         }
-    );
+    } else {
+        sensorsChecker.checkDeviceorientation(
+            function(){
+                if (window.DeviceOrientationEvent) {
+                    /**
+                     * if the device HAS sensors and the browser supports DeviceOrientationEvent
+                     * */
+
+                    deviceOrientationParallax();
+                } else if (!window.DeviceOrientationEvent) {
+                    /**
+                     * if the device HAS sensors but browser DOESN`T support DeviceOrientationEvent
+                     * */
+
+                    scrollParallax();
+                } else {
+                    /**
+                     * Just for safe. If there are more variants.
+                     * */
+
+                    scrollParallax();
+                }
+            },
+            function(){
+                /**
+                 * if the device DOESN`T have sensors
+                 * */
+                if (window.innerWidth <= 1024) {
+                    // alert('no sensor detected, \nMOBILE or TAB without sensors');
+                    scrollParallax();
+                } else {
+                    // alert('no sensor detected, \nDESKTOP');
+                    desktopParallax();
+                }
+            }
+        );
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function(){
