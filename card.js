@@ -4,6 +4,33 @@ if ( location.protocol !== "https:" ) {
     location.href = "https:" + window.location.href.substring( window.location.protocol.length );
 }
 
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+function setCookie(name, value, options = {}) {
+    options = {
+        path: '/',
+    };
+    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+    for (let optionKey in options) {
+        updatedCookie += "; " + optionKey;
+        let optionValue = options[optionKey];
+        if (optionValue !== true) {
+            updatedCookie += "=" + optionValue;
+        }
+    }
+    document.cookie = updatedCookie;
+}
+function deleteCookie(name) {
+    setCookie(name, "", {
+        'max-age': -1
+    })
+}
+
 function deviceOrientation(){
     let $card = document.querySelector('.card');
     let $body = document.querySelector('body');
@@ -11,13 +38,9 @@ function deviceOrientation(){
     function desktopParallax() {
         document.addEventListener('mousemove', function (e) {
             let leftRight  = -(window.innerWidth / 2 - e.pageX) / 35;
-            let bottomTop  = (window.innerHeight / 2 - e.pageY + pageYOffset + $card.offsetHeight) / 20;
-
-            console.log('bottomTop: ' + bottomTop);
-            console.log('pageYOffset: ' + pageYOffset);
+            let bottomTop  = (window.innerHeight / 2 - e.pageY + pageYOffset) / 20;
 
             $card.style.transform = 'rotateX(' + (bottomTop) + 'deg) rotateY(' + (leftRight) + 'deg)';
-            // document.querySelector('.card__info').textContent  = 'bottomTop:\ ' + bottomTop + 'deg' + '\n leftRight:\ ' + leftRight + 'deg';
         });
     }
 
@@ -55,17 +78,15 @@ function deviceOrientation(){
 
     function scrollParallax() {
         // alert('scrollParallax');
+        let windowHeight = window.innerHeight;
+        let cardHeight = $card.offsetHeight;
 
         window.addEventListener('scroll', function() {
-            let windowTopScroll = pageYOffset;
-            let windowHeight = window.innerHeight;
             let cardTop = $card.offsetTop;
-            let cardHeight = $card.offsetHeight;
+            let bottomTop = pageYOffset - cardTop + windowHeight / 2 - cardHeight / 2;
 
-            if(windowTopScroll < (cardTop + windowHeight) && windowTopScroll > (cardTop - windowHeight)) {
-                console.log('that`s it');
-            } else {
-                console.log('not yet');
+            if(pageYOffset < (cardTop + windowHeight + 150) && pageYOffset > (cardTop - windowHeight - 150)) {
+                $card.style.transform = 'rotateX(' + -(bottomTop / 10) + 'deg) rotateY(0deg)';
             }
         });
     }
@@ -73,33 +94,7 @@ function deviceOrientation(){
     sensorsChecker.checkDeviceorientation(
         function(){ // check if the device has sensors
             if (window.DeviceOrientationEvent) { // and check if the browser supports DeviceOrientationEvent
-                alert('Sensor detected, \nbrowser supports \nDeviceOrientationEvent');
-                function getCookie(name) {
-                    let matches = document.cookie.match(new RegExp(
-                        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-                    ));
-                    return matches ? decodeURIComponent(matches[1]) : undefined;
-                }
-                function setCookie(name, value, options = {}) {
-                    options = {
-                        path: '/',
-                    };
-                    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-
-                    for (let optionKey in options) {
-                        updatedCookie += "; " + optionKey;
-                        let optionValue = options[optionKey];
-                        if (optionValue !== true) {
-                            updatedCookie += "=" + optionValue;
-                        }
-                    }
-                    document.cookie = updatedCookie;
-                }
-                function deleteCookie(name) {
-                    setCookie(name, "", {
-                        'max-age': -1
-                    })
-                }
+                // alert('Sensor detected, \nbrowser supports \nDeviceOrientationEvent');
 
                 function sendRequest(){ //send request for using DeviceOrientationEvent ==> start deviceOrientationParallax if grated or don`t need
                     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
@@ -127,7 +122,7 @@ function deviceOrientation(){
                     deviceOrientationParallax();
                 }
             } else if (!window.DeviceOrientationEvent) {
-                alert('Sensor detected, \nbut the browser doesn`t support \nDeviceOrientationEvent');
+                // alert('Sensor detected, \nbut the browser doesn`t support \nDeviceOrientationEvent');
                 scrollParallax();
             } else {
                 scrollParallax();
@@ -135,16 +130,15 @@ function deviceOrientation(){
         },
         function(){
             if (window.innerWidth <= 1024) {
-                alert('no sensor detected, \nMOBILE or TAB without sensors');
+                // alert('no sensor detected, \nMOBILE or TAB without sensors');
                 scrollParallax();
             } else {
-                alert('no sensor detected, \nDESKTOP');
+                // alert('no sensor detected, \nDESKTOP');
                 desktopParallax();
-                // scrollParallax();
             }
         }
     );
-};
+}
 
 document.addEventListener("DOMContentLoaded", function(){
     deviceOrientation();
