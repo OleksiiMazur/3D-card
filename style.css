@@ -84,8 +84,8 @@ body {
 
 @media screen and (max-width: 767px) {
     .card:after {
-        height: 220px;
-        width: 220px;
-        transform: translateX(-50%) translateY(-50%) translateZ(40px);
+        height: 5px;
+        width: 5px;
+        transform: translateX(-50%) translateY(-50%) translateZ(200px);
     }
 }
