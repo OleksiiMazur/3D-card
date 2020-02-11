@@ -28,6 +28,7 @@ body {
 }
 
 .card {
+    /*background-color: #fff;*/
     position: relative;
     box-sizing: border-box;
     height: 400px;
@@ -40,15 +41,15 @@ body {
     position: absolute;
     z-index: -1;
     content: '';
-    background: #ccc;
-    top: 60%;
+    background: green;
+    top: 50%;
     left: 50%;
-    height: 250px;
-    width: 250px;
+    height: 5px;
+    width: 5px;
     border-radius: 50%;
-    opacity: 0.2;
-    filter: blur(70px);
-    transform: translateX(-50%) translateY(-50%) translateZ(20px);
+    opacity: 1;
+    /* filter: blur(70px); */
+    transform: translateX(-50%) translateY(-50%) translateZ(200px);
 }
 .card__img {
     position: absolute;
