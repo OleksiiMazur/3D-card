@@ -32,7 +32,7 @@ function deleteCookie(name) {
 }
 
 function deviceOrientation(){
-    let $card = document.querySelector('.card');
+    let $card = document.querySelectorAll('.card');
     let $body = document.querySelector('body');
 
     function sendRequest(){
@@ -56,7 +56,9 @@ function deviceOrientation(){
             let leftRight  = -(window.innerWidth / 2 - e.pageX) / 35;
             let bottomTop  = (window.innerHeight / 2 - e.pageY + pageYOffset) / 20;
 
-            $card.style.transform = 'rotateX(' + (bottomTop) + 'deg) rotateY(' + (leftRight) + 'deg)';
+            $card.forEach(function(el){
+                el.style.transform = 'rotateX(' + (bottomTop) + 'deg) rotateY(' + (leftRight) + 'deg)';
+            });
         });
     }
 
@@ -86,24 +88,25 @@ function deviceOrientation(){
                 leftRight = (event.beta / 2.5);
             }
 
-            $card.style.transform = 'rotateX(' + (bottomTop - 25) + 'deg) rotateY(' + leftRight + 'deg)';
-
-            // document.querySelector('.card__info').textContent  = 'bottomTop: ' + event.beta + 'deg' + '\nleftRight: ' + event.gamma + 'deg' + '\n compass: ' + event.alpha;
+            $card.forEach(function(el){
+                el.style.transform = 'rotateX(' + (bottomTop - 25) + 'deg) rotateY(' + leftRight + 'deg)';
+            });
         }, false);
     }
 
     function scrollParallax() {
-        // alert('scrollParallax');
         let windowHeight = window.innerHeight;
-        let cardHeight = $card.offsetHeight;
 
         window.addEventListener('scroll', function() {
-            let cardTop = $card.offsetTop;
-            let bottomTop = pageYOffset - cardTop + windowHeight / 2 - cardHeight / 2;
+            $card.forEach(function(el){
+                let cardTop = el.offsetTop;
+                let cardHeight = el.offsetHeight;
+                let bottomTop = pageYOffset - cardTop + windowHeight / 2 - cardHeight / 2;
 
-            if(pageYOffset < (cardTop + windowHeight + 150) && pageYOffset > (cardTop - windowHeight - 150)) {
-                $card.style.transform = 'rotateX(' + -(bottomTop / 10) + 'deg) rotateY(0deg)';
-            }
+                if(pageYOffset < (cardTop + windowHeight + 150) && pageYOffset > (cardTop - windowHeight - 150)) {
+                    el.style.transform = 'rotateX(' + -(bottomTop / 10) + 'deg) rotateY(0deg)';
+                }
+            });
         });
     }
 

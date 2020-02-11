@@ -16,7 +16,7 @@ body {
 .container {
     max-width: 90%;
     margin: 0 auto;
-    min-height: 400vh;
+    min-height: 200vh;
 }
 
 .grid-line {
@@ -46,12 +46,12 @@ body {
 }
 
 .card-wrap {
-    height: 300vh;
+    height: 150vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
     perspective: 1000px;
-    padding-top: 500px;
+    padding: 300px 0;
 }
 
 .card {
@@ -62,7 +62,7 @@ body {
     width: 400px;
     border-radius: 15px;
     transform-style: preserve-3d;
-    margin: 100px 0;
+    margin: 150px 0;
 }
 .card:after {
     position: absolute;
