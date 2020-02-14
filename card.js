@@ -89,7 +89,7 @@ function deviceOrientation(){
             }
 
             $card.forEach(function(el){
-                el.style.transform = 'rotateX(' + (bottomTop - 25) + 'deg) rotateY(' + leftRight + 'deg)';
+                el.style.transform = 'rotateX(' + (bottomTop - 15) + 'deg) rotateY(' + leftRight + 'deg)';
             });
         }, false);
     }
@@ -104,7 +104,7 @@ function deviceOrientation(){
                 let bottomTop = pageYOffset - cardTop + windowHeight / 2 - cardHeight / 2;
 
                 if(pageYOffset < (cardTop + windowHeight + 150) && pageYOffset > (cardTop - windowHeight - 150)) {
-                    el.style.transform = 'rotateX(' + -(bottomTop / 10) + 'deg) rotateY(0deg)';
+                    el.style.transform = 'rotateX(' + -(bottomTop / 7) + 'deg) rotateY(0deg)';
                 }
             });
         });

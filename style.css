@@ -55,7 +55,7 @@ body {
 }
 
 .card {
-    background-color: #2e2e2e;
+    background-color: #070707;
     position: relative;
     box-sizing: border-box;
     height: 400px;
@@ -80,7 +80,6 @@ body {
 }
 .card__img {
     position: absolute;
-    background: transparent url("shield.png") no-repeat center / 90%;
     top: 0;
     left: 0;
     height: 100%;
@@ -88,25 +87,33 @@ body {
     transform: translateZ(20px);
 }
 
+.card__img--shield {
+    background: transparent url("shield.png") no-repeat center / 90%;
+}
+
+.card__img--groot {
+    background: transparent url("groot.png") no-repeat center / 90%;
+}
+
 .card__title {
     width: 100%;
     text-align: center;
-    font-size: 40px;
+    font-size: 25px;
     position: absolute;
     top: 30px;
     left: 50%;
-    transform: translateX(-50%) translateZ(75px);
+    transform: translateX(-50%) translateZ(130px);
 }
 
 .card__info {
     display: block;
     width: 100%;
     text-align: left;
-    font-size: 18px;
+    font-size: 40px;
     position: absolute;
     bottom: 30px;
     left: 50%;
-    transform: translateX(-50%) translateZ(35px);
+    transform: translateX(-50%) translateZ(65px);
     max-width: 200px;
 }
 
